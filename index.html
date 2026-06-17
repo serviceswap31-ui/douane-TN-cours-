@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>دروس مناظرة ملازمين الديوانة التونسية 2025</title>
+  <meta name="description" content="دروس مفصلة بالعربية مع أمثلة ورسوم بيانية لمناظرة ملازمين الديوانة التونسية"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0b1426"/>
+  
+  <!-- Apple Mobile Web App Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="ديواني"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-wrap">
+        <div class="logo-icon">🛃</div>
+        <div>
+          <div class="logo-title">ديواني</div>
+          <div class="logo-sub">إعداد شامل 2025</div>
+        </div>
+      </div>
+      <button class="sidebar-close" id="sidebarClose">✕</button>
+    </div>
+    <div class="sidebar-progress">
+      <div class="progress-label">
+        <span>تقدّمك في الدروس</span>
+        <span id="progressText">0 / 15</span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <div class="nav-section-title">محاور المناظرة الـ 15</div>
+    </nav>
+    <div class="sidebar-footer" id="pwaInstallContainer" style="display: none; padding: 14px 16px; border-top: 1px solid var(--navy-border); text-align: center;">
+      <button class="btn-primary" id="btnInstallPWA" style="width: 100%; font-size: 12px; padding: 8px 12px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--navy); border: none; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <span>📲 تثبيت التطبيق</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="topbar-title" id="topbarTitle">الصفحة الرئيسية</div>
+      <div class="topbar-badge">🎯 مناظرة 2025</div>
+    </header>
+
+    <main class="content" id="contentArea">
+      <div class="page active" id="page-home">
+
+        <div class="hero">
+          <div class="hero-badge">📚 الدرس الأشمل والأكثر تفصيلاً</div>
+          <h1 class="hero-title">دروس مناظرة<br/><span class="gradient-text">ملازمين الديوانة التونسية</span></h1>
+          <p class="hero-desc">15 درساً مفصّلاً بالعربية مع <strong>أمثلة واقعية</strong> و<strong>رسوم بيانية تفاعلية</strong> وأسئلة تدريبية — مستقى من المصادر القانونية الرسمية</p>
+          <div class="hero-stats">
+            <div class="stat-card"><div class="stat-num">15</div><div class="stat-lbl">محور دراسي</div></div>
+            <div class="stat-card"><div class="stat-num">📊</div><div class="stat-lbl">رسوم بيانية</div></div>
+            <div class="stat-card"><div class="stat-num">💡</div><div class="stat-lbl">أمثلة عملية</div></div>
+            <div class="stat-card"><div class="stat-num">QCM</div><div class="stat-lbl">أسئلة تدريب</div></div>
+          </div>
+          <button class="btn-primary" onclick="navigateTo('ch1')">ابدأ الدراسة الآن ←</button>
+        </div>
+
+        <div class="chapters-grid" id="chaptersGrid"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('[Service Worker] Registered successfully:', reg.scope))
+          .catch((err) => console.error('[Service Worker] Registration failed:', err));
+      });
+    }
+
+    // PWA Install Prompt Handler
+    let deferredPrompt;
+    const installContainer = document.getElementById('pwaInstallContainer');
+    const btnInstall = document.getElementById('btnInstallPWA');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (installContainer) installContainer.style.display = 'block';
+    });
+
+    if (btnInstall) {
+      btnInstall.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response to the install prompt: ${outcome}`);
+        deferredPrompt = null;
+        if (installContainer) installContainer.style.display = 'none';
+      });
+    }
+
+    window.addEventListener('appinstalled', (event) => {
+      console.log('PWA installed successfully', event);
+      deferredPrompt = null;
+      if (installContainer) installContainer.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
